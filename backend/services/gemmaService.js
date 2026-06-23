@@ -11,7 +11,6 @@ const generateResponse = async (prompt) => {
     }
   );
 
-  return response.data.response;
-};
+const aiText = text;};
 
 module.exports = generateResponse;

@@ -2,14 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
+/* Load .env before importing routes/services */
+dotenv.config();
+
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const reportRoutes = require("./routes/reportRoutes");
-
-dotenv.config();
 
 const app = express();
 
@@ -34,7 +35,7 @@ app.get("/", (req, res) => {
   res.json({
     message: "Campus AI Skill Bridge Backend Running",
     status: "success",
-    aiEngine: "Ollama Gemma 4"
+    aiEngine: "OpenRouter Free Model"
   });
 });
 
@@ -47,8 +48,8 @@ app.use((req, res) => {
 app.use((error, req, res, next) => {
   console.error("Server Error:", error.message);
 
-  res.status(500).json({
-    message: "Internal server error"
+  res.status(error.status || 500).json({
+    message: error.message || "Internal server error"
   });
 });
 
@@ -57,5 +58,10 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Backend URL: http://localhost:${PORT}`);
-  console.log("AI Engine: Ollama Gemma 4");
+  console.log(
+    `AI Engine: OpenRouter (${
+      process.env.OPENROUTER_MODEL ||
+      "meta-llama/llama-3.3-70b-instruct:free"
+    })`
+  );
 });
